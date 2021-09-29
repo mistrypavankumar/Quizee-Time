@@ -1,7 +1,7 @@
 import React from "react";
 import Head from "next/head";
 import Navbar from "./Navbar";
-import { Container } from "@material-ui/core";
+import styled from "styled-components";
 
 const Layout = ({ children, title, description }) => {
   return (
@@ -17,3 +17,5 @@ const Layout = ({ children, title, description }) => {
 };
 
 export default Layout;
+
+const Container = styled.div``;

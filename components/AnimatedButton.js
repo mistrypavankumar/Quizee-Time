@@ -6,7 +6,7 @@ import {
   secondaryColor,
 } from "../data/constants/constants";
 
-const Button = ({ label, bgColor, padding }) => {
+const AnimatedButton = ({ label, bgColor, padding }) => {
   return (
     <BtnContainer bgColor={bgColor} padding={padding}>
       {label}
@@ -14,8 +14,20 @@ const Button = ({ label, bgColor, padding }) => {
   );
 };
 
-export default Button;
+export default AnimatedButton;
 
+const toggle = keyframes`
+  from{
+    transform: scale(1)
+  }
+  to{
+    transform: scale(1.1);
+  }
+`;
+
+const animate = css`
+  animation: ${toggle} 500ms ease-in-out infinite alternate;
+`;
 const BtnContainer = styled.button`
   padding: ${({ padding }) => (padding ? padding : "10px 25px")};
   background-color: ${({ bgColor }) => (bgColor ? bgColor : secondaryColor)};
@@ -33,4 +45,6 @@ const BtnContainer = styled.button`
     transform: scale(1.06);
     opacity: 0.9;
   }
+
+  ${animate}
 `;
