@@ -78,6 +78,7 @@ const NavbarContainer = styled.div`
   border-bottom: 3px solid ${secondaryColor};
   position: absolute;
   top: 0;
+  z-index: 999;
 
   box-shadow: 0 2px 20px ${secondaryColor};
 `;
