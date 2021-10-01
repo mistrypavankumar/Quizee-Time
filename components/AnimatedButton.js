@@ -6,9 +6,9 @@ import {
   secondaryColor,
 } from "../data/constants/constants";
 
-const AnimatedButton = ({ label, bgColor, padding }) => {
+const AnimatedButton = ({ label, onClick, bgColor, padding }) => {
   return (
-    <BtnContainer bgColor={bgColor} padding={padding}>
+    <BtnContainer onClick={onClick} bgColor={bgColor} padding={padding}>
       {label}
     </BtnContainer>
   );

@@ -2,8 +2,11 @@ import React from "react";
 import styled from "styled-components";
 import { lightPrimaryColor, secondaryColor } from "../data/constants/constants";
 import AnimatedButton from "./AnimatedButton";
+import { useRouter } from "next/router";
 
 const Banner = () => {
+  const router = useRouter();
+
   return (
     <Container>
       <p>Welcome to </p>
@@ -14,7 +17,10 @@ const Banner = () => {
         the real world by applying your skills what you learnt.
       </Desc>
       <Btn>
-        <AnimatedButton label="Let's Start Now" />
+        <AnimatedButton
+          onClick={() => router.push("/dashboard")}
+          label="Let's Start Now"
+        />
       </Btn>
     </Container>
   );
