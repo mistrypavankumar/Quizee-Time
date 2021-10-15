@@ -1,13 +1,23 @@
 import { Select, MenuItem, FormControl, Grid } from "@material-ui/core";
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import styled from "styled-components";
 import CustomTemplate from "../components/CustomTemplate";
 import MainPanel from "../components/MainPanel";
 import { lightPrimaryColor, primaryColor } from "../data/constants/constants";
 import Image from "next/image";
+import db from "./../utils/db";
+import QuizQuestion from "../models/QuizQuestion";
+import { Store } from "../utils/Store";
 
-const Dashboard = () => {
+const Dashboard = (props) => {
+  const quizQuestions = props;
+  const quizData = quizQuestions.quizQuestions;
+  const { state, dispatch } = useContext(Store);
+
   const [course, setCourse] = useState(0);
+  console.log(course);
+  console.log(typeof quizData[course].category);
+  console.log(quizData[course].question);
 
   const handleChange = (e) => {
     setCourse(e.target.value);
@@ -37,17 +47,31 @@ const Dashboard = () => {
 
         <MainPanelContainer>
           <MainPanel>
-            <Center>
-              <Image
-                src="/assets/selecting.svg"
-                alt="selecting"
-                width={300}
-                height={300}
-              />
-              <div>
-                <h3>Please select course to continue</h3>
-              </div>
-            </Center>
+            {course ? (
+              quizData.map((quizQuestion) => {
+                return (
+                  <>
+                    {course === parseInt(quizQuestion.catogory) && (
+                      <div key={quizQuestion._id}>
+                        <p>{quizQuestion.question}</p>
+                      </div>
+                    )}
+                  </>
+                );
+              })
+            ) : (
+              <Center>
+                <Image
+                  src="/assets/selecting.svg"
+                  alt="selecting"
+                  width={300}
+                  height={300}
+                />
+                <div>
+                  <h3>Please select course to continue</h3>
+                </div>
+              </Center>
+            )}
           </MainPanel>
         </MainPanelContainer>
       </MainContainer>
@@ -104,3 +128,16 @@ const Center = styled.div`
     }
   }
 `;
+
+// Fetching the data from server
+export async function getServerSideProps() {
+  await db.connect();
+  const quizQuestions = await QuizQuestion.find({}).lean();
+  await db.disconnect();
+
+  return {
+    props: {
+      quizQuestions: quizQuestions.map(db.convertDocToObj),
+    },
+  };
+}

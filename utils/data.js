@@ -1,4 +1,14 @@
 // import bcrypt from "bcryptjs";
+
+/* 
+  <==========Note: =========>
+  categories
+
+  1 = c
+  2 = c++
+  3 = Java
+  4 = python
+*/
 export const data = {
   quizquestions: [
     {
@@ -9,7 +19,7 @@ export const data = {
       option3: "Out << Hello world!;",
       option4: " None of the above",
       answer: "option1",
-      category: "clanguage",
+      category: "1",
     },
     {
       question: "Q2: Which of the following is the correct identifier?",
@@ -18,7 +28,7 @@ export const data = {
       option3: " varname@",
       option4: " None of the above",
       answer: "option2",
-      category: "clanguage",
+      category: "1",
     },
     {
       question: "Q3: Which of the following is the address operator?",
@@ -27,7 +37,7 @@ export const data = {
       option3: " &",
       option4: " %",
       answer: "option3",
-      category: "clanguage",
+      category: "1",
     },
     {
       question:
@@ -37,7 +47,7 @@ export const data = {
       option3: " Polymorphism",
       option4: " All of the above",
       answer: "option4",
-      category: "clanguage",
+      category: "1",
     },
     {
       question:
@@ -47,7 +57,7 @@ export const data = {
       option3: " Reprehensible",
       option4: " Extensible",
       answer: "option4",
-      category: "clanguage",
+      category: "1",
     },
     {
       question:
@@ -57,7 +67,7 @@ export const data = {
       option3: " Bjarne Stroustrup",
       option4: " Brian Kernighan",
       answer: "option3",
-      category: "clanguage",
+      category: "1",
     },
     {
       question:
@@ -67,7 +77,7 @@ export const data = {
       option3: ' < include > "userdefined.h " ',
       option4: " Both A and B",
       answer: "option4",
-      category: "clanguage",
+      category: "1",
     },
     {
       question:
@@ -77,7 +87,7 @@ export const data = {
       option3: " get(ch) ",
       option4: " Scanf(ch)",
       answer: "option3",
-      category: "clanguage",
+      category: "1",
     },
     {
       question:
@@ -87,7 +97,7 @@ export const data = {
       option3: " Variables other than passed parameters in a function ",
       option4: " Variables that are never used in the function",
       answer: "option1",
-      category: "clanguage",
+      category: "1",
     },
     {
       question: "Q10:The C++ language is ______ object-oriented language.",
@@ -96,7 +106,7 @@ export const data = {
       option3: " Semi Object-oriented or Partial Object-oriented ",
       option4: " None of the above",
       answer: "option3",
-      category: "clanguage",
+      category: "1",
     },
     {
       question:
@@ -106,7 +116,7 @@ export const data = {
       option3: " Comment// ",
       option4: " None of the above",
       answer: "option1",
-      category: "clanguage",
+      category: "1",
     },
     {
       question: "Q12:C++ is a ___ type of language.",
@@ -115,7 +125,7 @@ export const data = {
       option3: " Middle-level language ",
       option4: " None of the above",
       answer: "option3",
-      category: "clanguage",
+      category: "1",
     },
     {
       question:
@@ -125,7 +135,7 @@ export const data = {
       option3: " \\a ",
       option4: " None of the above",
       answer: "option1",
-      category: "clanguage",
+      category: "1",
     },
     {
       question: "Q14:Which one of the following represents the tab?",
@@ -134,7 +144,7 @@ export const data = {
       option3: " \\r",
       option4: " None of the above",
       answer: "option2",
-      category: "clanguage",
+      category: "1",
     },
     {
       question:
@@ -144,7 +154,7 @@ export const data = {
       option3: " An array can hold different types of datatypes ",
       option4: " None of the above",
       answer: "option1",
-      category: "clanguage",
+      category: "1",
     },
   ],
 };
