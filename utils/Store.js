@@ -1,11 +1,29 @@
 import { createContext, useReducer } from "react";
+import Cookies from "js-cookie";
+
 export const Store = createContext();
 
-const initialState = {};
+const initialState = {
+  userInfo: Cookies.get("userInfo")
+    ? JSON.parse(Cookies.get("userInfo"))
+    : null,
+};
 
 // Creating reducer
 const reducer = (state, action) => {
   switch (action.type) {
+    case "USER_LOGIN": {
+      return {
+        ...state,
+        userInfo: action.payload,
+      };
+    }
+    case "USER_LOGOUT": {
+      return {
+        ...state,
+        userInfo: null,
+      };
+    }
     case "NEXT": {
     }
     case "BACK": {

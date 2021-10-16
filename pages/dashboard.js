@@ -61,7 +61,7 @@ const Dashboard = (props) => {
 
         <MainPanelContainer>
           <MainPanel>
-            {course ? (
+            {course === Number(quizData[course].category) ? (
               <MainContent>
                 <p className="question">{quizData[questionNumber].question}</p>
                 <ul>
@@ -167,6 +167,8 @@ const MainContent = styled.div`
 
   p.question {
     font-size: 1.5rem;
+    color: ${primaryColor};
+    font-weight: 500;
   }
 
   ul {
@@ -179,35 +181,35 @@ const MainContent = styled.div`
 
       input[type="radio"] {
         margin-right: 1rem;
-      }
+        -moz-appearance: radio !important;
 
-      input[type="radio"]:after {
-        width: 1.5rem;
-        height: 1.5rem;
-        border-radius: 1.5rem;
-        top: -0.2rem;
-        left: -0.1rem;
-        position: relative;
-        background-color: #d1d3d1;
-        content: "";
-        display: inline-block;
-        visibility: visible;
-        border: 0.2rem solid white;
-        cursor: pointer;
-      }
-
-      input[type="radio"]:checked:after {
-        width: 1.8rem;
-        height: 1.8rem;
-        border-radius: 1.8rem;
-        top: -0.2rem;
-        left: -0.1rem;
-        position: relative;
-        background-color: red;
-        content: "";
-        display: inline-block;
-        visibility: visible;
-        border: 0.2rem solid white;
+        &::after {
+          width: 1.2rem;
+          height: 1.2rem;
+          border-radius: 1.5rem;
+          top: -0.2rem;
+          left: -0.1rem;
+          position: relative;
+          background-color: #d1d3d1;
+          content: "";
+          display: inline-block;
+          visibility: visible;
+          border: 0.2rem solid white;
+          cursor: pointer;
+        }
+        &:checked:after {
+          width: 1.3rem;
+          height: 1.3rem;
+          border-radius: 1.8rem;
+          top: -0.2rem;
+          left: -0.1rem;
+          position: relative;
+          background-color: ${primaryColor};
+          content: "";
+          display: inline-block;
+          visibility: visible;
+          border: 0.2rem solid white;
+        }
       }
     }
   }
