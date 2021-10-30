@@ -28,7 +28,7 @@ const toggle = keyframes`
 const animate = css`
   animation: ${toggle} 500ms ease-in-out infinite alternate;
 `;
-const BtnContainer = styled.button`
+const BtnContainer = styled.a`
   padding: ${({ padding }) => (padding ? padding : "10px 25px")};
   background-color: ${({ bgColor }) => (bgColor ? bgColor : secondaryColor)};
   border: none;
@@ -40,11 +40,35 @@ const BtnContainer = styled.button`
   opacity: 1;
   transition: transform 0.3s, opacity 0.3s;
   transform: scale(1);
+  position: relative;
 
-  :hover {
-    transform: scale(1.06);
-    opacity: 0.9;
+  &::after {
+    content: "";
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    top: 0;
+    left: 0;
+    border-radius: ${borderRadius};
+    z-index: -1;
+    transition: all 0.3s;
+    background-color: ${({ bgColor }) => (bgColor ? bgColor : secondaryColor)};
   }
 
-  ${animate}
+  :hover::after {
+    transform: scaleX(1.3) scaleY(1.6);
+    opacity: 0;
+  }
+
+  :hover {
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.5);
+    transform: translateY(-5px);
+  }
+
+  :active {
+    transform: translateY(-2px);
+    box-shadow: 0 5px 8px rgba(0, 0, 0, 0.5);
+  }
+
+  /* ${animate} */
 `;
