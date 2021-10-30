@@ -2,7 +2,10 @@ import mongoose from "mongoose";
 
 // creating schema
 const quizQuestionSchema = new mongoose.Schema({
-  category: { type: String, required: true },
+  category: {
+    type: String,
+    required: true,
+  },
   question: {
     type: String,
     required: true,
