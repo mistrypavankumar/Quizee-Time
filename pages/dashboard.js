@@ -1,5 +1,5 @@
 import { Select, MenuItem, FormControl, Grid } from "@material-ui/core";
-import React, { useContext, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import styled from "styled-components";
 import CustomTemplate from "../components/CustomTemplate";
 import MainPanel from "../components/MainPanel";
@@ -9,16 +9,16 @@ import db from "./../utils/db";
 import QuizQuestion from "../models/QuizQuestion";
 import { Store } from "../utils/Store";
 import Button from "./../components/Button";
+import { data } from "./../utils/data";
 
 const Dashboard = (props) => {
   const quizQuestions = props;
   const quizData = quizQuestions.quizQuestions;
   const { state, dispatch } = useContext(Store);
 
+  // console.log(quizData);
+
   const [course, setCourse] = useState(0);
-  console.log(course);
-  console.log(typeof quizData[course].category);
-  console.log(quizData[course].question);
 
   const [questionNumber, setQuestionNumber] = useState(0);
 
@@ -27,7 +27,7 @@ const Dashboard = (props) => {
   };
 
   const handleNextButton = () => {
-    if (questionNumber <= quizData.length) {
+    if (questionNumber <= selectedCourseData.length - 1) {
       setQuestionNumber(questionNumber + 1);
     }
   };
@@ -35,6 +35,37 @@ const Dashboard = (props) => {
   const handleSubmitButton = () => {
     // submit button functionality
   };
+
+  const [selectedCourseData, setSelectedCourseData] = useState([
+    {
+      question: "",
+      option1: "",
+      option2: "",
+      option3: "",
+      option4: "",
+      answer: "",
+      category: "",
+      qNo: "",
+    },
+  ]);
+  useEffect(() => {
+    // filtering the data
+
+    // console.log(quizData);
+    var newdata;
+    const filterData = async () => {
+      newdata = await quizData.filter((data) => {
+        return data.category !== course;
+      });
+      setSelectedCourseData(newdata);
+    };
+
+    filterData();
+
+    // console.log(newdata);
+  }, [course]);
+
+  // console.log(selectedCourseData[3].question);
 
   return (
     <CustomTemplate>
@@ -51,19 +82,21 @@ const Dashboard = (props) => {
                 {" "}
                 <em>Select Course </em>
               </MenuItem>
-              <MenuItem value={1}>C</MenuItem>
-              <MenuItem value={2}>C++</MenuItem>
-              <MenuItem value={3}>Java</MenuItem>
-              <MenuItem value={4}>Python</MenuItem>
+              <MenuItem value="c">C</MenuItem>
+              <MenuItem value="c++">C++</MenuItem>
+              <MenuItem value="java">Java</MenuItem>
+              <MenuItem value="python">Python</MenuItem>
             </Select>
           </FormControl>
         </Div>
 
         <MainPanelContainer>
           <MainPanel>
-            {course === Number(quizData[course].category) ? (
+            {course && selectedCourseData ? (
               <MainContent>
-                <p className="question">{quizData[questionNumber].question}</p>
+                <p className="question">
+                  {selectedCourseData[questionNumber].question}
+                </p>
                 <ul>
                   <li>
                     <input
@@ -74,7 +107,7 @@ const Dashboard = (props) => {
                     />
                     <label htmlFor="ans1" id="option1">
                       {" "}
-                      {quizData[questionNumber].option1}
+                      {selectedCourseData[questionNumber].option1}
                     </label>
                   </li>
                   <li>
@@ -86,7 +119,7 @@ const Dashboard = (props) => {
                     />
                     <label htmlFor="ans1" id="option2">
                       {" "}
-                      {quizData[questionNumber].option2}
+                      {selectedCourseData[questionNumber].option2}
                     </label>
                   </li>
                   <li>
@@ -98,7 +131,7 @@ const Dashboard = (props) => {
                     />
                     <label htmlFor="ans1" id="option3">
                       {" "}
-                      {quizData[questionNumber].option3}{" "}
+                      {selectedCourseData[questionNumber].option3}{" "}
                     </label>
                   </li>
                   <li>
@@ -110,12 +143,12 @@ const Dashboard = (props) => {
                     />
                     <label htmlFor="ans1" id="option4">
                       {" "}
-                      {quizData[questionNumber].option4}
+                      {selectedCourseData[questionNumber].option4}
                     </label>
                   </li>
                 </ul>
                 <div className="btnContainer">
-                  {questionNumber === quizData.length - 1 ? (
+                  {questionNumber === selectedCourseData.length - 1 ? (
                     <Button
                       label="Submit"
                       bgColor={primaryColor}
@@ -157,13 +190,16 @@ const Dashboard = (props) => {
 export default Dashboard;
 
 const MainContent = styled.div`
-  padding: 0px 100px;
+  padding: 0px 30px;
   height: 100%;
   width: 100%;
   display: flex;
   justify-content: center;
   flex-direction: column;
-  position: relative;
+
+  @media (min-width: 640px) {
+    padding: 0px 100px;
+  }
 
   p.question {
     font-size: 1.5rem;
@@ -215,9 +251,10 @@ const MainContent = styled.div`
   }
 
   .btnContainer {
-    position: absolute;
-    bottom: 10%;
-    right: 10%;
+    padding: 20px 0px 0px 0px;
+    display: flex;
+    justify-content: end;
+    align-items: center;
   }
 `;
 
@@ -273,6 +310,7 @@ const Center = styled.div`
 export async function getServerSideProps() {
   await db.connect();
   const quizQuestions = await QuizQuestion.find({}).lean();
+  // const result = await JSON.stringify(quizQuestions);
   await db.disconnect();
 
   return {

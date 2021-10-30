@@ -1,8 +1,7 @@
 import nc from "next-connect";
 import QuizQuestion from "../../models/QuizQuestion";
 import db from "../../utils/db";
-import { data } from "../../utils/data";
-import User from "../../models/User";
+import { cquizData, data, pyquizData } from "../../utils/data";
 
 const handler = nc();
 
@@ -11,7 +10,8 @@ handler.get(async (req, res) => {
   // await User.deleteMany();
   // await User.insertMany(data.users);
   await QuizQuestion.deleteMany();
-  await QuizQuestion.insertMany(data.quizquestions);
+  await QuizQuestion.insertMany(cquizData.quizQuestions);
+  await QuizQuestion.insertMany(pyquizData.quizQuestions);
   await db.disconnect();
   res.send({ message: "Seeded Successfully" });
 });
