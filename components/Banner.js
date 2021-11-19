@@ -1,11 +1,23 @@
-import React from "react";
+import React, { useContext } from "react";
 import styled from "styled-components";
 import { lightPrimaryColor, secondaryColor } from "../data/constants/constants";
 import AnimatedButton from "./AnimatedButton";
 import { useRouter } from "next/router";
+import { Store } from "../utils/Store";
 
 const Banner = () => {
   const router = useRouter();
+
+  const { state } = useContext(Store);
+  const { userInfo } = state;
+
+  const handleOnClick = () => {
+    if (userInfo) {
+      router.push("/dashboard");
+    } else {
+      router.push("/login");
+    }
+  };
 
   return (
     <Container>
@@ -17,10 +29,7 @@ const Banner = () => {
         the real world by applying your skills what you learnt.
       </Desc>
       <Btn>
-        <AnimatedButton
-          onClick={() => router.push("/dashboard")}
-          label="Let's Start Now"
-        />
+        <AnimatedButton onClick={handleOnClick} label="Let's Start Now" />
       </Btn>
     </Container>
   );

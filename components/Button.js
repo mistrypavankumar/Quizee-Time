@@ -6,13 +6,22 @@ import {
   secondaryColor,
 } from "../data/constants/constants";
 
-const Button = ({ label, type, bgColor, padding, onClick, textColor }) => {
+const Button = ({
+  label,
+  width,
+  type,
+  bgColor,
+  padding,
+  onClick,
+  textColor,
+}) => {
   return (
     <BtnContainer
       onClick={onClick}
       textColor={textColor}
       bgColor={bgColor}
       padding={padding}
+      width={width}
       type={type}
     >
       {label}
@@ -34,6 +43,7 @@ const BtnContainer = styled.button`
   opacity: 1;
   transition: transform 0.3s, opacity 0.3s;
   transform: scale(1);
+  width: ${({ width }) => (width ? width : null)};
 
   :hover {
     transform: scale(1.06);
