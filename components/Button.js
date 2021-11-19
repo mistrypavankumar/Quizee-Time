@@ -6,13 +6,14 @@ import {
   secondaryColor,
 } from "../data/constants/constants";
 
-const Button = ({ label, bgColor, padding, onClick, textColor }) => {
+const Button = ({ label, type, bgColor, padding, onClick, textColor }) => {
   return (
     <BtnContainer
       onClick={onClick}
       textColor={textColor}
       bgColor={bgColor}
       padding={padding}
+      type={type}
     >
       {label}
     </BtnContainer>

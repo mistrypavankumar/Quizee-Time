@@ -1,4 +1,4 @@
-// import bcrypt from "bcryptjs";
+import bcrypt from "bcryptjs";
 
 /* 
   <==========Note: =========>
@@ -9,11 +9,27 @@
   3 = Java
   4 = python
 */
+
+export const userData = {
+  users: [
+    {
+      name: "john",
+      email: "admin@example.com",
+      password: bcrypt.hashSync("123456"),
+      isAdmin: true,
+    },
+    {
+      name: "Jane",
+      email: "user@example.com",
+      password: bcrypt.hashSync("123456"),
+      isAdmin: false,
+    },
+  ],
+};
+
 export const cquizData = {
   quizQuestions: [
     {
-      // c: [
-      // {
       question:
         "Q1: Which of the following is the correct syntax to print the message in C++ language? --- 1",
       option1: 'cout <<"Hello world!";',
