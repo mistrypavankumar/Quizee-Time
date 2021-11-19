@@ -9,18 +9,27 @@ import db from "./../utils/db";
 import QuizQuestion from "../models/QuizQuestion";
 import { Store } from "../utils/Store";
 import Button from "./../components/Button";
-import { data } from "./../utils/data";
+// import { data } from "./../utils/data";
+import { useRouter } from "next/router";
 
 const Dashboard = (props) => {
+  const router = useRouter();
   const quizQuestions = props;
   const quizData = quizQuestions.quizQuestions;
   const { state, dispatch } = useContext(Store);
+  const { userInfo } = state;
 
   // console.log(quizData);
 
   const [course, setCourse] = useState(0);
 
   const [questionNumber, setQuestionNumber] = useState(0);
+
+  useEffect(() => {
+    if (!userInfo) {
+      router.replace("/");
+    }
+  }, [userInfo]);
 
   const handleChange = (e) => {
     setCourse(e.target.value);

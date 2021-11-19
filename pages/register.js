@@ -12,10 +12,12 @@ import Button from "./../components/Button";
 import { Store } from "./../utils/Store";
 import NextLink from "next/link";
 
-const LoginScreen = () => {
+const SignUPScreen = () => {
   const router = useRouter();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [cpassword, setCPassword] = useState("");
+  const [name, setName] = useState("");
 
   const { state, dispatch } = useContext(Store);
   const { userInfo } = state;
@@ -29,34 +31,48 @@ const LoginScreen = () => {
     }
   }, []);
 
-  const loginUser = async (e) => {
+  const registerUser = async (e) => {
     e.preventDefault();
 
-    try {
-      const { data } = await axios.post("/api/users/login", {
-        email,
-        password,
-      });
+    // try {
+    //   const { data } = await axios.post("/api/users/login", {
+    //     email,
+    //     password,
+    //   });
 
-      dispatch({ type: "USER_LOGIN", payload: data });
-      Cookies.set("userInfo", JSON.stringify(data));
+    //   dispatch({ type: "USER_LOGIN", payload: data });
+    //   Cookies.set("userInfo", JSON.stringify(data));
 
-      //if user logined then push to dashboard
-      router.push(redirect || "/dashboard");
-    } catch (err) {
-      console.log("Invalid Email or Password");
-    }
+    //   //if user logined then push to dashboard
+    //   router.push(redirect || "/dashboard");
+    // } catch (err) {
+    //   console.log("Invalid Email or Password");
+    // }
   };
 
   return (
     <FormContainer>
       <form>
-        <h1 className="login">Login</h1>
+        <h1 className="login">Sign Up</h1>
         <List>
+          <ListItem>
+            <label htmlFor="name">Username</label>
+            <br />
+            <input
+              required
+              type="text"
+              name="name"
+              autoComplete="off"
+              value={name}
+              placeholder="User Name"
+              onChange={(e) => setName(e.target.value)}
+            />
+          </ListItem>
           <ListItem>
             <label htmlFor="email">Email</label>
             <br />
             <input
+              required
               type="email"
               name="email"
               autoComplete="off"
@@ -69,6 +85,7 @@ const LoginScreen = () => {
             <label htmlFor="password">password</label>
             <br />
             <input
+              required
               type="password"
               name="password"
               autoComplete="off"
@@ -78,20 +95,33 @@ const LoginScreen = () => {
             />
           </ListItem>
           <ListItem>
+            <label htmlFor="cpassword">Confirm password</label>
+            <br />
+            <input
+              required
+              type="password"
+              name="cpassword"
+              autoComplete="off"
+              value={cpassword}
+              placeholder="Confirm Password"
+              onChange={(e) => setCPassword(e.target.value)}
+            />
+          </ListItem>
+          <ListItem>
             <Center>
               <Button
                 width="100%"
-                onClick={loginUser}
+                onClick={registerUser}
                 padding="15px 100px"
                 type="submit"
-                label="Login Now"
+                label="Register Now"
               />
 
               <ListItem>
                 <p className="register_link">
-                  Do not have an account?
-                  <NextLink href="/register">
-                    <a> Register now</a>
+                  Already have an account?
+                  <NextLink href="/login">
+                    <a> Login now</a>
                   </NextLink>
                 </p>
               </ListItem>
@@ -103,13 +133,14 @@ const LoginScreen = () => {
   );
 };
 
-export default LoginScreen;
+export default SignUPScreen;
 
 const FormContainer = styled.div`
   height: 100vh;
   width: 100%;
   background: ${primaryColor2};
   position: relative;
+  overflow: hidden;
 
   form {
     position: absolute;
@@ -117,6 +148,8 @@ const FormContainer = styled.div`
     left: 50%;
     transform: translate(-50%, -50%);
     width: 100%;
+    height: auto;
+    padding-bottom: 50px;
 
     @media (min-width: 468px) {
       width: 40%;
@@ -144,7 +177,7 @@ const ListItem = styled.div`
 
   input {
     width: 100%;
-    padding: 15px 20px;
+    padding: 10px 20px;
     border-radius: 10px;
     outline: none;
     border: none;
