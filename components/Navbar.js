@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import styled from "styled-components";
 import {
   lightPrimaryColor,
@@ -8,9 +8,11 @@ import {
 import NextLink from "next/link";
 import { Link } from "@material-ui/core";
 import Button from "./Button";
+import { Store } from "../utils/Store";
 
 const Navbar = () => {
-  const [userInfo, setUserInfo] = useState("");
+  const { state, dispatch } = useContext(Store);
+  const { userInfo } = state;
   return (
     <NavbarContainer>
       <Container>
@@ -23,7 +25,7 @@ const Navbar = () => {
         </Logo>
 
         <RightContainer>
-          {userInfo ? <p>Hello! Jhon </p> : null}
+          {userInfo ? <p>Hello! {userInfo.name}</p> : null}
           {userInfo ? (
             <svg
               width="30"
@@ -59,7 +61,9 @@ const Navbar = () => {
               />
             </svg>
           ) : (
-            <Button label="Login" />
+            <NextLink href="/login">
+              <Button label="Login" />
+            </NextLink>
           )}
         </RightContainer>
       </Container>
