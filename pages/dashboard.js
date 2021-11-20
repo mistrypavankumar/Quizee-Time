@@ -277,13 +277,22 @@ const MainContent = styled.div`
     flex-direction: column;
 
     h1 {
-      font-size: 3em;
+      font-size: 2.5em;
       color: ${primaryColor};
+      text-align: center;
+
+      @media (min-width: 468px) {
+        font-size: 3em;
+      }
     }
 
     h2 {
-      font-size: 2em;
+      font-size: 1.8em;
       color: ${primaryColor2};
+
+      @media (min-width: 468px) {
+        font-size: 2em;
+      }
     }
   }
   .centerBtn {
