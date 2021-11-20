@@ -3,7 +3,12 @@ import React, { useContext, useEffect, useState } from "react";
 import styled from "styled-components";
 import CustomTemplate from "../components/CustomTemplate";
 import MainPanel from "../components/MainPanel";
-import { lightPrimaryColor, primaryColor } from "../data/constants/constants";
+import {
+  lightPrimaryColor,
+  primaryColor,
+  primaryColor2,
+  secondaryColor,
+} from "../data/constants/constants";
 import Image from "next/image";
 import db from "./../utils/db";
 import QuizQuestion from "../models/QuizQuestion";
@@ -19,32 +24,10 @@ const Dashboard = (props) => {
   const { state, dispatch } = useContext(Store);
   const { userInfo } = state;
 
-  // console.log(quizData);
-
   const [course, setCourse] = useState(0);
+  const [isQuizStarted, setIsQuizStarted] = useState(false);
 
   const [questionNumber, setQuestionNumber] = useState(0);
-
-  useEffect(() => {
-    if (!userInfo) {
-      router.replace("/");
-    }
-  }, [userInfo]);
-
-  const handleChange = (e) => {
-    setCourse(e.target.value);
-  };
-
-  const handleNextButton = () => {
-    if (questionNumber <= selectedCourseData.length - 1) {
-      setQuestionNumber(questionNumber + 1);
-    }
-  };
-
-  const handleSubmitButton = () => {
-    // submit button functionality
-  };
-
   const [selectedCourseData, setSelectedCourseData] = useState([
     {
       question: "",
@@ -57,10 +40,17 @@ const Dashboard = (props) => {
       qNo: "",
     },
   ]);
+
+  const [userScore, setUserScore] = useState(0);
+  const [userOption, setUserOption] = useState(null);
+
   useEffect(() => {
+    if (!userInfo) {
+      router.replace("/");
+    }
+
     // filtering the data
 
-    // console.log(quizData);
     var newdata;
     const filterData = async () => {
       newdata = await quizData.filter((data) => {
@@ -72,9 +62,45 @@ const Dashboard = (props) => {
     filterData();
 
     // console.log(newdata);
-  }, [course]);
+  }, [course, userInfo]);
 
   // console.log(selectedCourseData[3].question);
+
+  const handleChange = (e) => {
+    setCourse(e.target.value);
+    setIsQuizStarted(!isQuizStarted);
+  };
+
+  const handleNextButton = () => {
+    if (questionNumber <= selectedCourseData.length - 1) {
+      setQuestionNumber(questionNumber + 1);
+    }
+
+    if (userOption === selectedCourseData[questionNumber].answer) {
+      setUserScore(userScore + 1);
+      console.log(userScore);
+    }
+    // console.log(userOption + "----> " + userScore);
+  };
+
+  const handleSubmitButton = () => {
+    // submit button functionality
+    setIsQuizStarted(!isQuizStarted);
+    if (userOption === selectedCourseData[questionNumber].answer) {
+      setUserScore(userScore + 1);
+      console.log(userScore);
+    }
+  };
+
+  const handleResetButton = () => {
+    if (!isQuizStarted) {
+      setCourse(0);
+      setQuestionNumber(0);
+      setIsQuizStarted(false);
+      setUserOption(null);
+      setUserScore(0);
+    }
+  };
 
   return (
     <CustomTemplate>
@@ -102,80 +128,114 @@ const Dashboard = (props) => {
         <MainPanelContainer>
           <MainPanel>
             {course && selectedCourseData ? (
-              <MainContent>
-                <p className="question">
-                  {selectedCourseData[questionNumber].question}
-                </p>
-                <ul>
-                  <li>
-                    <input
-                      type="radio"
-                      name="answer"
-                      id="ans1"
-                      className="answer"
-                    />
-                    <label htmlFor="ans1" id="option1">
-                      {" "}
-                      {selectedCourseData[questionNumber].option1}
-                    </label>
-                  </li>
-                  <li>
-                    <input
-                      type="radio"
-                      name="answer"
-                      id="ans2"
-                      className="answer"
-                    />
-                    <label htmlFor="ans1" id="option2">
-                      {" "}
-                      {selectedCourseData[questionNumber].option2}
-                    </label>
-                  </li>
-                  <li>
-                    <input
-                      type="radio"
-                      name="answer"
-                      id="ans3"
-                      className="answer"
-                    />
-                    <label htmlFor="ans1" id="option3">
-                      {" "}
-                      {selectedCourseData[questionNumber].option3}{" "}
-                    </label>
-                  </li>
-                  <li>
-                    <input
-                      type="radio"
-                      name="answer"
-                      id="ans4"
-                      className="answer"
-                    />
-                    <label htmlFor="ans1" id="option4">
-                      {" "}
-                      {selectedCourseData[questionNumber].option4}
-                    </label>
-                  </li>
-                </ul>
-                <div className="btnContainer">
-                  {questionNumber === selectedCourseData.length - 1 ? (
+              isQuizStarted ? (
+                <MainContent>
+                  <p className="question">
+                    {selectedCourseData[questionNumber].question}
+                  </p>
+                  <ul>
+                    <li>
+                      <input
+                        type="radio"
+                        name="answer"
+                        value="option1"
+                        onChange={(e) => setUserOption(e.target.value)}
+                        id="ans1"
+                        className="answer"
+                      />
+                      <label htmlFor="ans1" id="option1">
+                        {" "}
+                        {selectedCourseData[questionNumber].option1}
+                      </label>
+                    </li>
+                    <li>
+                      <input
+                        type="radio"
+                        name="answer"
+                        value="option2"
+                        onChange={(e) => setUserOption(e.target.value)}
+                        id="ans2"
+                        className="answer"
+                      />
+                      <label htmlFor="ans1" id="option2">
+                        {" "}
+                        {selectedCourseData[questionNumber].option2}
+                      </label>
+                    </li>
+                    <li>
+                      <input
+                        type="radio"
+                        name="answer"
+                        value="option3"
+                        onChange={(e) => setUserOption(e.target.value)}
+                        id="ans3"
+                        className="answer"
+                      />
+                      <label htmlFor="ans1" id="option3">
+                        {" "}
+                        {selectedCourseData[questionNumber].option3}{" "}
+                      </label>
+                    </li>
+                    <li>
+                      <input
+                        type="radio"
+                        name="answer"
+                        value="option4"
+                        onChange={(e) => setUserOption(e.target.value)}
+                        id="ans4"
+                        className="answer"
+                      />
+                      <label htmlFor="ans1" id="option4">
+                        {" "}
+                        {selectedCourseData[questionNumber].option4}
+                      </label>
+                    </li>
+                  </ul>
+                  <div className="btnContainer">
+                    {questionNumber === selectedCourseData.length - 1 ? (
+                      <Button
+                        label="Submit"
+                        bgColor={primaryColor}
+                        textColor={lightPrimaryColor}
+                        padding="12px 40px"
+                        onClick={handleSubmitButton}
+                      />
+                    ) : (
+                      <Button
+                        label="Next"
+                        bgColor={primaryColor}
+                        textColor={lightPrimaryColor}
+                        padding="12px 40px"
+                        onClick={handleNextButton}
+                      />
+                    )}
+                  </div>
+                </MainContent>
+              ) : (
+                <MainContent>
+                  <div className="content">
+                    <h1 className="wish">
+                      🎉 Congratulations! {userInfo.name}🎉
+                    </h1>
+                    <h2 className="result">
+                      You had scored:{" "}
+                      <span className="score">
+                        {userScore}/{selectedCourseData.length}
+                      </span>
+                    </h2>
+                  </div>
+                  <div className="centerBtn">
                     <Button
-                      label="Submit"
+                      label="Rest Again"
                       bgColor={primaryColor}
                       textColor={lightPrimaryColor}
                       padding="12px 40px"
-                      onClick={handleSubmitButton}
+                      width="50%"
+                      onClick={handleResetButton}
                     />
-                  ) : (
-                    <Button
-                      label="Next"
-                      bgColor={primaryColor}
-                      textColor={lightPrimaryColor}
-                      padding="12px 40px"
-                      onClick={handleNextButton}
-                    />
-                  )}
-                </div>
-              </MainContent>
+                  </div>
+                </MainContent>
+              )
             ) : (
               <Center>
                 <Image
@@ -208,6 +268,29 @@ const MainContent = styled.div`
 
   @media (min-width: 640px) {
     padding: 0px 100px;
+  }
+
+  .content {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+
+    h1 {
+      font-size: 3em;
+      color: ${primaryColor};
+    }
+
+    h2 {
+      font-size: 2em;
+      color: ${primaryColor2};
+    }
+  }
+  .centerBtn {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
   }
 
   p.question {
