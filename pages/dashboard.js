@@ -62,7 +62,7 @@ const Dashboard = (props) => {
     filterData();
 
     // console.log(newdata);
-  }, [course, userInfo]);
+  }, [course, userInfo, quizData, router]);
 
   // console.log(selectedCourseData[3].question);
 
