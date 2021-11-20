@@ -11,11 +11,14 @@ import {
 import Button from "./../components/Button";
 import { Store } from "./../utils/Store";
 import NextLink from "next/link";
+import ErrorCard from "../components/Error/ErrorCard";
 
 const LoginScreen = () => {
   const router = useRouter();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [errorMessage, setErrorMessage] = useState("");
+  const [isErrorOccur, setIsErrorOccur] = useState(true);
 
   const { state, dispatch } = useContext(Store);
   const { userInfo } = state;
@@ -44,12 +47,17 @@ const LoginScreen = () => {
       //if user logined then push to dashboard
       router.push(redirect || "/dashboard");
     } catch (err) {
+      setIsErrorOccur(!isErrorOccur);
+      setErrorMessage("Invalid Email or Password");
       console.log("Invalid Email or Password");
     }
   };
 
   return (
     <FormContainer>
+      {errorMessage && isErrorOccur ? (
+        <ErrorCard isError={isErrorOccur} message={errorMessage} />
+      ) : null}
       <form>
         <h1 className="login">Login</h1>
         <List>

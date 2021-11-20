@@ -13,6 +13,7 @@ import { Store } from "../utils/Store";
 const Navbar = () => {
   const { state, dispatch } = useContext(Store);
   const { userInfo } = state;
+
   return (
     <NavbarContainer>
       <Container>

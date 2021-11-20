@@ -11,6 +11,10 @@ import {
 import Button from "./../components/Button";
 import { Store } from "./../utils/Store";
 import NextLink from "next/link";
+import ErrorCard from "../components/Error/ErrorCard";
+import { yupResolver } from "@hookform/resolvers/yup";
+import { useForm } from "react-hook-form";
+import * as Yup from "yup";
 
 const SignUPScreen = () => {
   const router = useRouter();
@@ -18,6 +22,9 @@ const SignUPScreen = () => {
   const [password, setPassword] = useState("");
   const [cpassword, setCPassword] = useState("");
   const [name, setName] = useState("");
+  const [errorMessage, setErrorMessage] = useState("");
+  const [isErrorOccur, setIsErrorOccur] = useState(false);
+  4;
 
   const { state, dispatch } = useContext(Store);
   const { userInfo } = state;
@@ -31,55 +38,85 @@ const SignUPScreen = () => {
     }
   }, []);
 
+  const validationSchema = Yup.object().shape({
+    username: Yup.string().required("username is required"),
+    email: Yup.string().required("email is required").email("email is invalid"),
+    password: Yup.string()
+      .min(6, "password must be at least 6 characters")
+      .required("password is required"),
+    cpassword: Yup.string()
+      .oneOf([Yup.ref("password"), null], "Password must match")
+      .required("confirm password is required"),
+  });
+
+  const formOptions = { resolver: yupResolver(validationSchema) };
+  const { handleSubmit, register, formState } = useForm(formOptions);
+  const { errors } = formState;
+
   const registerUser = async (e) => {
     e.preventDefault();
 
-    // try {
-    //   const { data } = await axios.post("/api/users/login", {
-    //     email,
-    //     password,
-    //   });
+    if (password !== cpassword) {
+      setIsErrorOccur(!isErrorOccur);
+      setErrorMessage("Password must match");
+      console.log("password must match");
+      return;
+    }
 
-    //   dispatch({ type: "USER_LOGIN", payload: data });
-    //   Cookies.set("userInfo", JSON.stringify(data));
+    try {
+      const { data } = await axios.post("/api/users/register", {
+        name,
+        email,
+        password,
+      });
 
-    //   //if user logined then push to dashboard
-    //   router.push(redirect || "/dashboard");
-    // } catch (err) {
-    //   console.log("Invalid Email or Password");
-    // }
+      dispatch({ type: "USER_LOGIN", payload: data });
+      Cookies.set("userInfo", JSON.stringify(data));
+      router.push(redirect || "/dashboard");
+    } catch (err) {
+      setIsErrorOccur(!isErrorOccur);
+      setErrorMessage("please fill details properly.");
+      console.log("please fill details properly.");
+    }
   };
 
   return (
     <FormContainer>
-      <form>
+      {errorMessage && isErrorOccur ? (
+        <ErrorCard isError={isErrorOccur} message={errorMessage} />
+      ) : null}
+      <form onSubmit={handleSubmit(registerUser)}>
         <h1 className="login">Sign Up</h1>
         <List>
           <ListItem>
-            <label htmlFor="name">Username</label>
+            <label htmlFor="username">Username</label>
             <br />
             <input
-              required
               type="text"
-              name="name"
+              name="username"
+              {...register("username")}
               autoComplete="off"
               value={name}
               placeholder="User Name"
               onChange={(e) => setName(e.target.value)}
             />
+            <br />
+            <p>{errors.username?.message}</p>
           </ListItem>
           <ListItem>
             <label htmlFor="email">Email</label>
             <br />
             <input
-              required
+              {...register("email")}
               type="email"
               name="email"
               autoComplete="off"
               value={email}
               placeholder="Email"
               onChange={(e) => setEmail(e.target.value)}
+              required
             />
+            <p>{errors.username?.message}</p>
           </ListItem>
           <ListItem>
             <label htmlFor="password">password</label>
@@ -98,13 +135,13 @@ const SignUPScreen = () => {
             <label htmlFor="cpassword">Confirm password</label>
             <br />
             <input
-              required
               type="password"
               name="cpassword"
               autoComplete="off"
               value={cpassword}
               placeholder="Confirm Password"
               onChange={(e) => setCPassword(e.target.value)}
+              required
             />
           </ListItem>
           <ListItem>
@@ -116,11 +153,12 @@ const SignUPScreen = () => {
                 type="submit"
                 label="Register Now"
               />
-
               <ListItem>
                 <p className="register_link">
                   Already have an account?
-                  <NextLink href="/login">
+                  <NextLink
+                    href={`/login?redirect=${redirect || "/dashboard"}`}
+                  >
                     <a> Login now</a>
                   </NextLink>
                 </p>
