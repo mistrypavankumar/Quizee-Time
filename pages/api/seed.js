@@ -1,7 +1,13 @@
 import nc from "next-connect";
 import QuizQuestion from "../../models/QuizQuestion";
 import db from "../../utils/db";
-import { cquizData, userData, pyquizData } from "../../utils/data";
+import {
+  cquizData,
+  userData,
+  pyquizData,
+  cppquizData,
+  javaquizData,
+} from "../../utils/data";
 import User from "../../models/User";
 
 const handler = nc();
@@ -16,6 +22,8 @@ handler.get(async (req, res) => {
   await QuizQuestion.deleteMany();
   await QuizQuestion.insertMany(cquizData.quizQuestions);
   await QuizQuestion.insertMany(pyquizData.quizQuestions);
+  await QuizQuestion.insertMany(cppquizData.quizQuestions);
+  await QuizQuestion.insertMany(javaquizData.quizQuestions);
 
   // disconnected database
   await db.disconnect();

@@ -54,8 +54,11 @@ const Dashboard = (props) => {
     var newdata;
     const filterData = async () => {
       newdata = await quizData.filter((data) => {
-        return data.category !== course;
+        console.log();
+        return data.category == course.toString();
       });
+
+      // console.log(newdata[0].category);
       setSelectedCourseData(newdata);
     };
 
@@ -63,8 +66,6 @@ const Dashboard = (props) => {
 
     // console.log(newdata);
   }, [course, userInfo, quizData, router]);
-
-  // console.log(selectedCourseData[3].question);
 
   const handleChange = (e) => {
     setCourse(e.target.value);
@@ -80,11 +81,9 @@ const Dashboard = (props) => {
       setUserScore(userScore + 1);
       console.log(userScore);
     }
-    // console.log(userOption + "----> " + userScore);
   };
 
   const handleSubmitButton = () => {
-    // submit button functionality
     setIsQuizStarted(!isQuizStarted);
     if (userOption === selectedCourseData[questionNumber].answer) {
       setUserScore(userScore + 1);
@@ -102,6 +101,8 @@ const Dashboard = (props) => {
     }
   };
 
+  console.log(course);
+
   return (
     <CustomTemplate>
       <MainContainer>
@@ -118,7 +119,7 @@ const Dashboard = (props) => {
                 <em>Select Course </em>
               </MenuItem>
               <MenuItem value="c">C</MenuItem>
-              <MenuItem value="c++">C++</MenuItem>
+              <MenuItem value="cpp">C++</MenuItem>
               <MenuItem value="java">Java</MenuItem>
               <MenuItem value="python">Python</MenuItem>
             </Select>
@@ -131,6 +132,7 @@ const Dashboard = (props) => {
               isQuizStarted ? (
                 <MainContent>
                   <p className="question">
+                    Q{questionNumber + 1}:{" "}
                     {selectedCourseData[questionNumber].question}
                   </p>
                   <ul>
