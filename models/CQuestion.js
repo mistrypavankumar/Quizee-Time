@@ -1,7 +1,7 @@
 import mongoose from "mongoose";
 
 // creating schema
-const quizQuestionSchema = new mongoose.Schema({
+const cQuestionSchema = new mongoose.Schema({
   category: {
     type: String,
     required: true,
@@ -17,8 +17,7 @@ const quizQuestionSchema = new mongoose.Schema({
   answer: { type: String, required: true },
 });
 
-const QuizQuestion =
-  mongoose.models.QuizQuestion ||
-  mongoose.model("QuizQuestion", quizQuestionSchema);
+const CQuestion =
+  mongoose.models.CQuestions || mongoose.model("CQuestions", cQuestionSchema);
 
-export default QuizQuestion;
+export default CQuestion;

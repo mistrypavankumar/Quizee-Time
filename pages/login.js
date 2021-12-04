@@ -12,6 +12,7 @@ import Button from "./../components/Button";
 import { Store } from "./../utils/Store";
 import NextLink from "next/link";
 import ErrorCard from "../components/Error/ErrorCard";
+import CircularLoader from "../components/Loader/CircularLoader";
 
 const LoginScreen = () => {
   const router = useRouter();
@@ -19,6 +20,7 @@ const LoginScreen = () => {
   const [password, setPassword] = useState("");
   const [errorMessage, setErrorMessage] = useState("");
   const [isErrorOccur, setIsErrorOccur] = useState(true);
+  const [isLoading, setIsLoading] = useState(false);
 
   const { state, dispatch } = useContext(Store);
   const { userInfo } = state;
@@ -28,9 +30,13 @@ const LoginScreen = () => {
   // check user for existance
   useEffect(() => {
     if (userInfo) {
-      router.replace("/dashboard");
+      setIsLoading(true);
+
+      setTimeout(() => {
+        router.replace("/dashboard");
+      }, 5000);
     }
-  }, []);
+  }, [userInfo, router]);
 
   const loginUser = async (e) => {
     e.preventDefault();
@@ -58,55 +64,59 @@ const LoginScreen = () => {
       {errorMessage && isErrorOccur ? (
         <ErrorCard isError={isErrorOccur} message={errorMessage} />
       ) : null}
-      <form>
-        <h1 className="login">Login</h1>
-        <List>
-          <ListItem>
-            <label htmlFor="email">Email</label>
-            <br />
-            <input
-              type="email"
-              name="email"
-              autoComplete="off"
-              value={email}
-              placeholder="Email"
-              onChange={(e) => setEmail(e.target.value)}
-            />
-          </ListItem>
-          <ListItem>
-            <label htmlFor="password">password</label>
-            <br />
-            <input
-              type="password"
-              name="password"
-              autoComplete="off"
-              value={password}
-              placeholder="Password"
-              onChange={(e) => setPassword(e.target.value)}
-            />
-          </ListItem>
-          <ListItem>
-            <Center>
-              <Button
-                width="100%"
-                onClick={loginUser}
-                padding="15px 100px"
-                type="submit"
-                label="Login Now"
+      {isLoading ? (
+        <CircularLoader />
+      ) : (
+        <form>
+          <h1 className="login">Login</h1>
+          <List>
+            <ListItem>
+              <label htmlFor="email">Email</label>
+              <br />
+              <input
+                type="email"
+                name="email"
+                autoComplete="off"
+                value={email}
+                placeholder="Email"
+                onChange={(e) => setEmail(e.target.value)}
               />
+            </ListItem>
+            <ListItem>
+              <label htmlFor="password">password</label>
+              <br />
+              <input
+                type="password"
+                name="password"
+                autoComplete="off"
+                value={password}
+                placeholder="Password"
+                onChange={(e) => setPassword(e.target.value)}
+              />
+            </ListItem>
+            <ListItem>
+              <Center>
+                <Button
+                  width="100%"
+                  onClick={loginUser}
+                  padding="15px 100px"
+                  type="submit"
+                  label="Login Now"
+                />
 
-              <ListItem>
-                <p className="register_link">
-                  Do not have an account?
-                  <NextLink href="/register">
-                    <a> Register now</a>
-                  </NextLink>
-                </p>
-              </ListItem>
-            </Center>
-          </ListItem>
-        </List>
-      </form>
+                <ListItem>
+                  <p className="register_link">
+                    Do not have an account?
+                    <NextLink href="/register">
+                      <a> Register now</a>
+                    </NextLink>
+                  </p>
+                </ListItem>
+              </Center>
+            </ListItem>
+          </List>
+        </form>
+      )}
     </FormContainer>
   );
 };
