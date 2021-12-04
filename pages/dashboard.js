@@ -11,16 +11,24 @@ import {
 } from "../data/constants/constants";
 import Image from "next/image";
 import db from "./../utils/db";
-import QuizQuestion from "../models/QuizQuestion";
 import { Store } from "../utils/Store";
 import Button from "./../components/Button";
-// import { data } from "./../utils/data";
 import { useRouter } from "next/router";
+import CQuestion from "../models/CQuestion";
+import CppQuestion from "../models/CppQuestion";
+import JavaQuestion from "../models/JavaQuestion";
+import PythonQuestion from "../models/PythonQuestion";
 
 const Dashboard = (props) => {
   const router = useRouter();
-  const quizQuestions = props;
-  const quizData = quizQuestions.quizQuestions;
+  const questions = props;
+  // console.log(cQuestions.cppQuestions);
+
+  const quizData1 = questions.cQuestions;
+  const quizData2 = questions.cppQuestions;
+  const quizData3 = questions.javaQuestions;
+  const quizData4 = questions.pythonQuestions;
+
   const { state, dispatch } = useContext(Store);
   const { userInfo } = state;
 
@@ -28,43 +36,89 @@ const Dashboard = (props) => {
   const [isQuizStarted, setIsQuizStarted] = useState(false);
 
   const [questionNumber, setQuestionNumber] = useState(0);
-  const [selectedCourseData, setSelectedCourseData] = useState([
-    {
-      question: "",
-      option1: "",
-      option2: "",
-      option3: "",
-      option4: "",
-      answer: "",
-      category: "",
-      qNo: "",
-    },
-  ]);
+  const [selectedCourseData, setSelectedCourseData] = useState({
+    question: "",
+    option1: "",
+    option2: "",
+    option3: "",
+    option4: "",
+    answer: "",
+    category: "",
+    qNo: "",
+  });
 
   const [userScore, setUserScore] = useState(0);
   const [userOption, setUserOption] = useState(null);
 
+  // Total number of questions
+  const totalNoOfQuestions = 5;
+
   useEffect(() => {
+    // re-direct to homepage if use doesn't exit
     if (!userInfo) {
       router.replace("/");
     }
 
-    // filtering the data
-
-    var newdata;
-    const filterData = async () => {
-      newdata = await quizData.filter((data) => {
-        return data.category !== course;
-      });
-      setSelectedCourseData(newdata);
-    };
-
-    filterData();
-
-    // console.log(newdata);
-  }, [course, userInfo]);
-
-  // console.log(selectedCourseData[3].question);
+    // data should be display on the screen when user choose any course
+    try {
+      if (course === "c") {
+        setSelectedCourseData({
+          question: quizData1[questionNumber].question,
+          option1: quizData1[questionNumber].option1,
+          option2: quizData1[questionNumber].option2,
+          option3: quizData1[questionNumber].option3,
+          option4: quizData1[questionNumber].option4,
+          answer: quizData1[questionNumber].answer,
+          category: quizData1[questionNumber].category,
+          qNo: "1",
+        });
+      } else if (course === "cpp") {
+        setSelectedCourseData({
+          question: quizData2[questionNumber].question,
+          option1: quizData2[questionNumber].option1,
+          option2: quizData2[questionNumber].option2,
+          option3: quizData2[questionNumber].option3,
+          option4: quizData2[questionNumber].option4,
+          answer: quizData2[questionNumber].answer,
+          category: quizData2[questionNumber].category,
+          qNo: "1",
+        });
+      } else if (course === "java") {
+        setSelectedCourseData({
+          question: quizData3[questionNumber].question,
+          option1: quizData3[questionNumber].option1,
+          option2: quizData3[questionNumber].option2,
+          option3: quizData3[questionNumber].option3,
+          option4: quizData3[questionNumber].option4,
+          answer: quizData3[questionNumber].answer,
+          category: quizData3[questionNumber].category,
+          qNo: "1",
+        });
+      } else if (course === "python") {
+        setSelectedCourseData({
+          question: quizData4[questionNumber].question,
+          option1: quizData4[questionNumber].option1,
+          option2: quizData4[questionNumber].option2,
+          option3: quizData4[questionNumber].option3,
+          option4: quizData4[questionNumber].option4,
+          answer: quizData4[questionNumber].answer,
+          category: quizData4[questionNumber].category,
+          qNo: "1",
+        });
+      }
+    } catch (error) {
+      // console.log(error);
+    }
+  }, [
+    userInfo,
+    router,
+    course,
+    questionNumber,
+    quizData1,
+    quizData2,
+    quizData3,
+    quizData4,
+  ]);
 
   const handleChange = (e) => {
     setCourse(e.target.value);
@@ -72,23 +126,21 @@ const Dashboard = (props) => {
   };
 
   const handleNextButton = () => {
-    if (questionNumber <= selectedCourseData.length - 1) {
+    if (questionNumber <= quizData1.length - 2) {
       setQuestionNumber(questionNumber + 1);
     }
 
-    if (userOption === selectedCourseData[questionNumber].answer) {
+    if (userOption === selectedCourseData.answer) {
       setUserScore(userScore + 1);
-      console.log(userScore);
+      // console.log(userScore);
     }
-    // console.log(userOption + "----> " + userScore);
   };
 
   const handleSubmitButton = () => {
-    // submit button functionality
     setIsQuizStarted(!isQuizStarted);
-    if (userOption === selectedCourseData[questionNumber].answer) {
+    if (userOption === selectedCourseData.answer) {
       setUserScore(userScore + 1);
-      console.log(userScore);
+      // console.log(userScore);
     }
   };
 
@@ -101,6 +153,9 @@ const Dashboard = (props) => {
       setUserScore(0);
     }
   };
+
+  // console.log(quizData.length);
+  // console.log(course);
 
   return (
     <CustomTemplate>
@@ -118,7 +173,7 @@ const Dashboard = (props) => {
                 <em>Select Course </em>
               </MenuItem>
               <MenuItem value="c">C</MenuItem>
-              <MenuItem value="c++">C++</MenuItem>
+              <MenuItem value="cpp">C++</MenuItem>
               <MenuItem value="java">Java</MenuItem>
               <MenuItem value="python">Python</MenuItem>
             </Select>
@@ -131,7 +186,7 @@ const Dashboard = (props) => {
               isQuizStarted ? (
                 <MainContent>
                   <p className="question">
-                    {selectedCourseData[questionNumber].question}
+                    Q{questionNumber + 1}: {selectedCourseData.question}
                   </p>
                   <ul>
                     <li>
@@ -145,7 +200,7 @@ const Dashboard = (props) => {
                       />
                       <label htmlFor="ans1" id="option1">
                         {" "}
-                        {selectedCourseData[questionNumber].option1}
+                        {selectedCourseData.option1}
                       </label>
                     </li>
                     <li>
@@ -159,7 +214,7 @@ const Dashboard = (props) => {
                       />
                       <label htmlFor="ans1" id="option2">
                         {" "}
-                        {selectedCourseData[questionNumber].option2}
+                        {selectedCourseData.option2}
                       </label>
                     </li>
                     <li>
@@ -173,7 +228,7 @@ const Dashboard = (props) => {
                       />
                       <label htmlFor="ans1" id="option3">
                         {" "}
-                        {selectedCourseData[questionNumber].option3}{" "}
+                        {selectedCourseData.option3}{" "}
                       </label>
                     </li>
                     <li>
@@ -187,12 +242,12 @@ const Dashboard = (props) => {
                       />
                       <label htmlFor="ans1" id="option4">
                         {" "}
-                        {selectedCourseData[questionNumber].option4}
+                        {selectedCourseData.option4}
                       </label>
                     </li>
                   </ul>
                   <div className="btnContainer">
-                    {questionNumber === selectedCourseData.length - 1 ? (
+                    {questionNumber === quizData1.length - 1 ? (
                       <Button
                         label="Submit"
                         bgColor={primaryColor}
@@ -220,7 +275,7 @@ const Dashboard = (props) => {
                     <h2 className="result">
                       You had scored:{" "}
                       <span className="score">
-                        {userScore}/{selectedCourseData.length}
+                        {userScore}/{quizData1.length}
                       </span>
                     </h2>
                   </div>
@@ -410,13 +465,20 @@ const Center = styled.div`
 // Fetching the data from server
 export async function getServerSideProps() {
   await db.connect();
-  const quizQuestions = await QuizQuestion.find({}).lean();
-  // const result = await JSON.stringify(quizQuestions);
+  const cQuestions = await CQuestion.find({}).lean();
+  const cppQuestions = await CppQuestion.find({}).lean();
+  const javaQuestions = await JavaQuestion.find({}).lean();
+  const pythonQuestions = await PythonQuestion.find({}).lean();
+
+  // const result = await JSON.stringify(cQuestions);
   await db.disconnect();
 
   return {
     props: {
-      quizQuestions: quizQuestions.map(db.convertDocToObj),
+      cQuestions: cQuestions.map(db.convertDocToObj),
+      cppQuestions: cppQuestions.map(db.convertDocToObj),
+      javaQuestions: javaQuestions.map(db.convertDocToObj),
+      pythonQuestions: pythonQuestions.map(db.convertDocToObj),
     },
   };
 }

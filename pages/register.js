@@ -15,6 +15,7 @@ import ErrorCard from "../components/Error/ErrorCard";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { useForm } from "react-hook-form";
 import * as Yup from "yup";
+import CircularLoader from "../components/Loader/CircularLoader";
 
 const SignUPScreen = () => {
   const router = useRouter();
@@ -24,7 +25,7 @@ const SignUPScreen = () => {
   const [name, setName] = useState("");
   const [errorMessage, setErrorMessage] = useState("");
   const [isErrorOccur, setIsErrorOccur] = useState(false);
-  4;
+  const [isLoading, setIsLoading] = useState(false);
 
   const { state, dispatch } = useContext(Store);
   const { userInfo } = state;
@@ -34,9 +35,13 @@ const SignUPScreen = () => {
   // check user for existance
   useEffect(() => {
     if (userInfo) {
-      router.replace("/dashboard");
+      setIsLoading(true);
+
+      setTimeout(() => {
+        router.replace("/dashboard");
+      }, 5000);
     }
-  }, []);
+  }, [userInfo, router]);
 
   const validationSchema = Yup.object().shape({
     username: Yup.string().required("username is required"),
@@ -85,88 +90,92 @@ const SignUPScreen = () => {
       {errorMessage && isErrorOccur ? (
         <ErrorCard isError={isErrorOccur} message={errorMessage} />
       ) : null}
-      <form onSubmit={handleSubmit(registerUser)}>
-        <h1 className="login">Sign Up</h1>
-        <List>
-          <ListItem>
-            <label htmlFor="username">Username</label>
-            <br />
-            <input
-              type="text"
-              name="username"
-              {...register("username")}
-              autoComplete="off"
-              value={name}
-              placeholder="User Name"
-              onChange={(e) => setName(e.target.value)}
-            />
-            <br />
-            <p>{errors.username?.message}</p>
-          </ListItem>
-          <ListItem>
-            <label htmlFor="email">Email</label>
-            <br />
-            <input
-              {...register("email")}
-              type="email"
-              name="email"
-              autoComplete="off"
-              value={email}
-              placeholder="Email"
-              onChange={(e) => setEmail(e.target.value)}
-              required
-            />
-            <p>{errors.username?.message}</p>
-          </ListItem>
-          <ListItem>
-            <label htmlFor="password">password</label>
-            <br />
-            <input
-              required
-              type="password"
-              name="password"
-              autoComplete="off"
-              value={password}
-              placeholder="Password"
-              onChange={(e) => setPassword(e.target.value)}
-            />
-          </ListItem>
-          <ListItem>
-            <label htmlFor="cpassword">Confirm password</label>
-            <br />
-            <input
-              type="password"
-              name="cpassword"
-              autoComplete="off"
-              value={cpassword}
-              placeholder="Confirm Password"
-              onChange={(e) => setCPassword(e.target.value)}
-              required
-            />
-          </ListItem>
-          <ListItem>
-            <Center>
-              <Button
-                width="100%"
-                onClick={registerUser}
-                padding="15px 100px"
-                type="submit"
-                label="Register Now"
+      {isLoading ? (
+        <CircularLoader />
+      ) : (
+        <form onSubmit={handleSubmit(registerUser)}>
+          <h1 className="login">Sign Up</h1>
+          <List>
+            <ListItem>
+              <label htmlFor="username">Username</label>
+              <br />
+              <input
+                type="text"
+                name="username"
+                {...register("username")}
+                autoComplete="off"
+                value={name}
+                placeholder="User Name"
+                onChange={(e) => setName(e.target.value)}
               />
-              <ListItem>
-                <p className="register_link">
-                  Already have an account?
-                  <NextLink
-                    href={`/login?redirect=${redirect || "/dashboard"}`}
-                  >
-                    <a> Login now</a>
-                  </NextLink>
-                </p>
-              </ListItem>
-            </Center>
-          </ListItem>
-        </List>
-      </form>
+              <br />
+              <p>{errors.username?.message}</p>
+            </ListItem>
+            <ListItem>
+              <label htmlFor="email">Email</label>
+              <br />
+              <input
+                {...register("email")}
+                type="email"
+                name="email"
+                autoComplete="off"
+                value={email}
+                placeholder="Email"
+                onChange={(e) => setEmail(e.target.value)}
+                required
+              />
+              <p>{errors.username?.message}</p>
+            </ListItem>
+            <ListItem>
+              <label htmlFor="password">password</label>
+              <br />
+              <input
+                required
+                type="password"
+                name="password"
+                autoComplete="off"
+                value={password}
+                placeholder="Password"
+                onChange={(e) => setPassword(e.target.value)}
+              />
+            </ListItem>
+            <ListItem>
+              <label htmlFor="cpassword">Confirm password</label>
+              <br />
+              <input
+                type="password"
+                name="cpassword"
+                autoComplete="off"
+                value={cpassword}
+                placeholder="Confirm Password"
+                onChange={(e) => setCPassword(e.target.value)}
+                required
+              />
+            </ListItem>
+            <ListItem>
+              <Center>
+                <Button
+                  width="100%"
+                  onClick={registerUser}
+                  padding="15px 100px"
+                  type="submit"
+                  label="Register Now"
+                />
+                <ListItem>
+                  <p className="register_link">
+                    Already have an account?
+                    <NextLink
+                      href={`/login?redirect=${redirect || "/dashboard"}`}
+                    >
+                      <a> Login now</a>
+                    </NextLink>
+                  </p>
+                </ListItem>
+              </Center>
+            </ListItem>
+          </List>
+        </form>
+      )}
     </FormContainer>
   );
 };
