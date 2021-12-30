@@ -10,13 +10,13 @@
 <br />
 <p align="center">
   <a href="https://github.com/mg143pavankumar/Quizee-Time">
-    <img src="./frontend/src/assets/logowhite.png" alt="Logo" width="20%" height="20%">
+    <img src="./public/assets/qtlogo.png" alt="Logo" width="20%" height="20%">
   </a>
 
-  <h3 align="center">Share Me</h3>
+  <h3 align="center">Quizee-Time</h3>
 
   <p align="center">
-    Socail media web application where user can share, comment and save images
+    Online platform where students can enhance their skills by testing themselves. 
     <br />
     <a href="https://github.com/mg143pavankumar/Quizee-Time
 "><strong>Explore the docs »</strong></a>
@@ -57,12 +57,8 @@
 <img src="./public/assets/quize-time-home-page-screenshot.png" />
 <img src="./public/assets/quize-time-dashboad-page.png" />
 
-This project is completely based on social media where user can,
-+ upload different types of images
-+ download images 
-+ save images for future use
-+ delete images
-+ comment on images
+Online platform where all user all over the world can test their skills and can improve their interview skills by answering following quize question.
+The purpose of Quizee Time website is to make users to be more comfortable during their interviews.
 
 ### Built With
 
