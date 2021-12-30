@@ -54,7 +54,8 @@
 <!-- ABOUT THE PROJECT -->
 ## About The Project
 
-![web-screenshot](https://user-images.githubusercontent.com/68140538/147773065-f4c40c17-51bc-4099-9396-a76d47e7d637.png)
+<img src="./public/assets/quize-time-home-page-screenshot.png" />
+<img src="./public/assets/quize-time-dashboad-page.png" />
 
 This project is completely based on social media where user can,
 + upload different types of images
