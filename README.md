@@ -131,8 +131,10 @@ Project Link: [https://github.com/mg143pavankumar/Quizee-Time](https://github.co
 <!-- ACKNOWLEDGEMENTS -->
 ## Acknowledgements
 
-* [Tailwindcss](https://tailwindcss.com/)
-* [React Icons](https://react-icons.github.io/react-icons/)
+* [react-hook-form](https://react-hook-form.com/)
+* [axios](https://axios-http.com/docs/intro)
+* [styled-Components](https://styled-components.com/)
+* [bcryptjs](https://openbase.com/js/bcryptjs/documentation)
 
 
 
