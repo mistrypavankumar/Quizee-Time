@@ -62,9 +62,9 @@ The purpose of Quizee Time website is to make users to be more comfortable durin
 
 ### Built With
 
-* [Sanity](https://www.sanity.io/)
-* [Reactjs](https://reactjs.org/)
-* [Tailwindcss](https://tailwindcss.com/)
+* [Nextjs](https://nextjs.org/)
+* [Mongoodb](https://www.mongodb.com/)
+* [Styled-Components](https://styled-components.com/)
 
 
 
